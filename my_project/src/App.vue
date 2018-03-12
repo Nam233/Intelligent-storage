@@ -6,11 +6,11 @@
           欢迎来到智能仓储管理平台
         </span>
       <ul>
-        <li class="login_reg" v-if= "login_state" >欢迎 {{username}} <a href="#" @click = "logout"> 注销</a></li>
+        <li class="login_reg" v-if= "login_state" ><span @click = "turn_to_userinfo" style="margin-right: 10px;">欢迎 {{username}} </span> <a href="#" @click = "logout"> 注销</a></li>
         <li class="login_reg" v-else><a href="/#/login">请登录</a> <a href="/#/register">免费注册</a></li>
         <li>帮助中心</li>
         <li>联系我们</li>
-        <li id="go_cart">我的背包</li>
+        <li @click = "turn_to_userinfo" >个人信息</li>
         <li>我的仓库</li>
         <li>我的货品</li>
       </ul>
@@ -55,6 +55,9 @@ export default {
       document.cookie="username=null";
       this.login_state = false;
       window.location.reload();
+    },
+    turn_to_userinfo(){
+      this.$router.push('/user');
     }
   }
 }
