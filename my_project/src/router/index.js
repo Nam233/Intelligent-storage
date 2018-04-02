@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Userinfo from '@/components/Userinfo'
+import Storage_1 from '@/components/Storage'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/user',
       name: 'Userinfo',
       component: Userinfo
+    },
+    {
+      path: '/storage',
+      name: 'Storage',
+      component: Storage_1
     }
   ]
 })

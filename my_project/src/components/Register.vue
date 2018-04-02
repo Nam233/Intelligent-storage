@@ -98,9 +98,9 @@ export default {
 .main {
   height: 800px;
   width: 100%;
-  box-shadow: 0 -4px 20px 8px rgba(0, 0, 0, 0.3);
-  background: url(../../static/img/login_bg.jpg) no-repeat fixed 0 45px;
-  background-size:1920px 800px;
+  box-shadow:0px 4px 16px rgba(2, 2, 36,.7) inset; 
+  background: url(../../static/img/login_bg.jpg) no-repeat fixed center center;
+  background-size:1920px 1080px;
   overflow: hidden;
 }
 
@@ -112,6 +112,7 @@ export default {
 .main .container .well {
   border: none;
   background: #121C27;
+  opacity: 0.95;
 }
 
 .main .container .well .text-left {

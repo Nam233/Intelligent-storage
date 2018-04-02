@@ -97,13 +97,14 @@ export default {
   height: 800px;
   overflow: hidden;
   box-shadow:0px 4px 16px rgba(2, 2, 36,.7) inset; 
-  background: url(../../static/img/login_bg.jpg) no-repeat fixed 0 45px;
-  background-size:1920px 800px;
+ background: url(../../static/img/login_bg.jpg) no-repeat fixed center center;
+  background-size:1920px 1080px;
 }
 
 .content .container {
   margin: 0 auto;
   margin-top: 250px;
+  opacity: 0.95;
 }
 
 .content .container .well {
@@ -136,6 +137,8 @@ export default {
 
 .content .container .well .checkbox label {
   color: white;
+  float: left;
+  margin-top: 10px;
 }
 
 .content .container .well .checkbox label span {
@@ -144,6 +147,7 @@ export default {
 
 .content .container .well .btn {
   background-color: #184c86;
+  margin-top: 10px;
   border: none;
 }
 

@@ -1,18 +1,16 @@
 <template>
 	<div>
 		<h1>{{msg}}</h1>
-     <router-link to="/" style="color:pink;">Go to Index</router-link>
-		 <router-link to="/storage" style="color:pink;">Go to Storage</router-link>
-	</div>
-	
 
+	</div>
 </template>
 <script >
+import axios from 'axios'
 	export default {
-  name: 'Userinfo',
+  name: 'Storage_1',
   data () {
     return {
-      msg: 'This is Your personal info page'
+      msg: 'This is Your Storage'
     }
   },
   created: function () {
