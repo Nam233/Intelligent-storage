@@ -38,26 +38,49 @@ app.post("/api/test_post",function(req,res){
     let {name} = req.body;
     var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
     console.log(" 调用时间："+time+"   二维码信息为： "+name);
-    res.json({
-        code:0,
-        msg:"已经连接上post"
-    })
+    Warehouse.find({},function(err,doc){
+           if (err) {
+                console.log(err);
+                return
+             };
+             res.json({
+                 code:0,
+                 list:doc
+             })
+        })
 });
 //查询仓库列表
-app.get("/api/select_warehouse",function(req,res){
-    Warehouse.find({},function(err,doc){
-       if (err) {
-            console.log(err);
-            return
-         };
-         res.json({
-             code:0,
-             list:doc
-         })
-    })
+app.post("/api/select_warehouse",function(req,res){
+     var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_warehouse");
+    let {_id} = req.body;
+    if(_id){
+        Warehouse.find({_id},function(err,doc){
+           if (err) {
+                
+             };
+             res.json({
+                 code:0,
+                 list:doc
+             })
+        })
+    }else{
+        Warehouse.find({},function(err,doc){
+           if (err) {
+                console.log(err);
+                return
+             };
+             res.json({
+                 code:0,
+                 list:doc
+             })
+        })
+    }
 });
 //添加新的仓库
 app.post("/api/insert_warehouse",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" insert_warehouse");
     let{name,location} = req.body;
     var w = new Warehouse({
         name,
@@ -74,8 +97,308 @@ app.post("/api/insert_warehouse",function(req,res){
          })
     });
 })
+//仓库添加库位
+app.post("/api/insert_location",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" insert_location");
+    let{name,is_empty,warehouse_id} = req.body;
+    var l = new Storage_location({
+        name,
+        is_empty,
+        warehouse_id
+    });
+    l.save(function(err,doc){
+         if (err) {
+            console.log(err);
+            return
+         };
+         res.json({
+             code:0,
+             msg:doc
+         })
+    });
+});
+//仓库删除
+app.post("/api/del_storage",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" del_storage");
+    var _id = req.body;
+    Warehouse.findOneAndRemove({_id},function(err,doc){
+        if (err) {
+            return
+        };
+        res.json({
+            code:0,
+            msg:"删除成功"
+        })
+    })
+});
+//仓库库位查询
+app.post("/api/select_location",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_location");
+    let {warehouse_id,_id} = req.body;
+    if(warehouse_id){
+            Storage_location.find({warehouse_id},function(err,doc){
+            if(doc.length){
+                res.json({
+                    code:0,
+                    msg:doc
+                })
+            }else{
+                res.json({
+                    code:1,
+                    msg:"查询失败"
+                })
+            }
+        })
+    }
+    if(_id){
+         Storage_location.find({_id},function(err,doc){
+            if(doc.length){
+                res.json({
+                    code:0,
+                    msg:doc
+                })
+            }else{
+                res.json({
+                    code:1,
+                    msg:"查询失败"
+                })
+            }
+        })
+    }
+    
+
+})
+//处理库位删除
+app.post("/api/del_location",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" del_location");
+    var _id = req.body;
+    Storage_location.findOneAndRemove({_id},function(err,doc){
+        if (err) {
+            return
+        };
+        res.json({
+            code:0,
+            msg:"删除成功"
+        })
+    })
+});
+//货品录入
+app.post("/api/insert_good",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" insert_good");
+    let {name, batch,number} = req.body;
+    var  g =  new Good({
+            name, 
+            batch,
+            number
+        });
+     g.save(function(err,doc){
+         if (err) {
+            console.log(err);
+            return
+         };
+         res.json({
+             code:0,
+             msg:"录入货品成功"
+         })
+     });
+});
+//查询全部货品
+app.get("/api/select_allgoods",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_allgoods");
+    Good.find({},function(err,doc){
+        if(doc.length){
+            res.json({
+                code:0,
+                msg:doc
+            })
+        }else{
+            res.json({
+                code:1,
+                msg:"查询失败"
+            })
+        }
+    })
+});
+//根据商品ID 查询 商品信息
+app.post("/api/select_goodByid",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_goodByid");
+    let {_id} = req.body;
+    Good.find({_id},function(err,doc){
+        if(doc.length){
+            res.json({
+                code:0,
+                msg:doc
+            })
+        }else{
+            res.json({
+                code:1,
+                msg:"查询失败"
+            })
+        }
+    })
+})
+//查询当前存放记录
+app.post("/api/select_inventory",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_inventory");
+    let {storage_location_id,goods_id} = req.body;
+    if(storage_location_id){
+        Inventory.find({storage_location_id},function(err,doc){
+            if(err){
+                return
+            }
+            res.json({
+                code:0,
+                msg:doc
+            })
+        })
+    }
+    if(goods_id){
+        Inventory.find({goods_id},function(err,doc){
+            if(err){
+                return
+            }
+            res.json({
+                code:0,
+                msg:doc
+            })
+        })
+    }
+});
+//查询历史存放记录
+app.post("/api/select_history_inventory",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" select_history_inventory");
+    let {storage_location_id,goods_id} = req.body;
+    if(storage_location_id){
+        History_inventory.find({storage_location_id},function(err,doc){
+            if(err){
+                return
+            }
+            res.json({
+                code:0,
+                msg:doc
+            })
+        })
+    }
+    if(goods_id){
+        History_inventory.find({goods_id},function(err,doc){
+            if(err){
+                return
+            }
+            res.json({
+                code:0,
+                msg:doc
+            })
+        })
+    }
+});
+//根据_id删除货品
+app.post("/api/del_good",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" del_good");
+    var _id = req.body;
+    Good.findOneAndRemove({_id},function(err,doc){
+        if (err) {
+            return
+        };
+        res.json({
+            code:0,
+            msg:"删除成功"
+        })
+    })
+});
+//入库操作
+app.post("/api/push_indoor",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    var careat_at = time;
+    console.log(" 调用时间："+time+" push_indoor");
+    let {storage_location_id,goods_id} = req.body;
+    Inventory.find({goods_id},function(err,doc){
+        if(doc.length){
+            res.json({
+             code:1,
+             msg:"商品已在库中"
+         })
+        }else{
+             var i = new Inventory({
+                    storage_location_id, 
+                    goods_id,
+                    careat_at
+                });
+            i.save(function(err,doc){
+                  Storage_location.findOneAndUpdate({_id:storage_location_id},{is_empty:0},{new:true},function(err,doc){
+                    if (err) {
+                        return
+                    };
+                })
+                 if (err) {
+                    console.log(err);
+                    return
+                 };
+                 res.json({
+                     code:0,
+                     msg:"写入成功"
+                 })
+             })
+        }
+    });
+});
+//出库操作
+app.post("/api/pull_indoor",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    var delete_at = time;
+    console.log(" 调用时间："+time+" pull_indoor");
+    let {goods_id} = req.body;
+    Inventory.find({goods_id},function(err,doc){
+        if(doc.length){            
+            Inventory.findOneAndRemove({goods_id},function(err,doc){
+                if (err) {
+                    return
+                };
+                let {storage_location_id,goods_id,careat_at} = doc;
+                var h = new History_inventory({
+                    storage_location_id,
+                    goods_id,
+                    careat_at,
+                    delete_at
+                });
+                h.save(function(err,doc){
+                    if (err) {
+                        return
+                    };
+                    Storage_location.findOneAndUpdate({_id:storage_location_id},{is_empty:1},{new:true},function(err,doc){
+                        if (err) {
+                            return
+                        };
+                        res.json({
+                            code:0,
+                            msg:"出库成功"
+                        })
+                    })
+                })
+                
+            })
+        }else{
+            res.json({
+                code:1,
+                msg:"商品并不在库中"
+            })
+        }
+    });
+
+})
 //处理前端路径为/api/login的post请求
 app.post("/api/login",function(req,res){
+    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" login");
     //查询是否有这个用户
     let {username,pwd} = req.body;
     User.find({username},function(err,doc){
@@ -103,6 +426,8 @@ app.post("/api/login",function(req,res){
 })
 //处理用户注册
 app.post("/api/regist",function(req,res){
+     var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm');
+    console.log(" 调用时间："+time+" regist");
     //获取到了数据，要存到数据库了
     let {username,pwd,name} = req.body;
     //创建usermodel实例

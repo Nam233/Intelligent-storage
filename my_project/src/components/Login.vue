@@ -76,13 +76,14 @@ export default {
         params.username = this.username;
         params.pwd = this.psw;
         axios.post('/api/login',params).then((res)=>{
-          if(!res.data.code){
-            alert(res.data.msg);
-            if(res.data.code == 0){
+          if(res.data.code){
+            alert(res.data.msg);   
+          }
+           if(res.data.code == 0){
+              alert("登陆成功")
               document.cookie="username="+this.username;
               this.$router.push('/')
             }
-          }
         })
       },
       change_check(){//checkbox选中

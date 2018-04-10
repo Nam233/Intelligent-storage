@@ -11,8 +11,8 @@
         <li>帮助中心</li>
         <li>联系我们</li>
         <li @click = "turn_to_userinfo" >个人信息</li>
-        <li>我的仓库</li>
-        <li>我的货品</li>
+        <li @click = "turn_to_mystorage">我的仓库</li>
+        <li @click = "turn_to_mygoods">我的货品</li>
       </ul>
     </div>
     </header>
@@ -58,6 +58,12 @@ export default {
     },
     turn_to_userinfo(){
       this.$router.push('/user');
+    },
+    turn_to_mystorage(){
+      this.$router.push('/storage');
+    },
+    turn_to_mygoods(){
+      this.$router.push('/good');
     }
   }
 }

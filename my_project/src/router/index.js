@@ -5,6 +5,8 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Userinfo from '@/components/Userinfo'
 import Storage_1 from '@/components/Storage'
+import Location from '@/components/Location'
+import Goods from '@/components/Goods'
 
 Vue.use(Router)
 
@@ -34,6 +36,17 @@ export default new Router({
       path: '/storage',
       name: 'Storage',
       component: Storage_1
+    },
+    {
+      path: '/storage/location',
+      name: 'Location',
+      component: Location
+    }
+    ,
+    {
+      path: '/good',
+      name: 'Goods',
+      component: Goods
     }
   ]
 })
