@@ -165,6 +165,7 @@ export default {
                     if(!res.data.code){
                       this.good_name = res.data.msg[0].name;
                       $('#myModal').modal('toggle');
+                      this.flush_info();
                     }
                 })
               }
