@@ -32,7 +32,7 @@
       <tr  v-for="item in items" @click ="turn_to_location(item._id)" >
         <td class="title" >{{ item.location }}</td>
         <td class="title" >{{ item.name }}</td>
-        <td class="del"><span @click ="del_storage(item._id)">   X</span></td>
+        <td class="del"><span @click.stop ="del_storage(item._id)">   X</span></td>
     </tr>
     </tbody>
 </table>
@@ -90,15 +90,47 @@ import axios from 'axios'
      this.$router.push('/storage/location?'+id);
     },
     del_storage(id){
-      //删除对应的数据
+      //查询仓库中是否有物品
+      var is_Del = true;
       var params = {};
-      params._id = id;
-      axios.post('/api/del_storage',params).then((res)=>{//根据_id删除对应库位信息
+      params.warehouse_id = id;
+      axios.post('/api/select_location',params).then((res)=>{
           if(!res.data.code){
-            alert("删除成功");
-            this.check_info();
+           res.data.msg.forEach((curr,index)=>{
+              if(curr.is_empty == 0){
+                is_Del = false;
+              }
+           })
           }
-      })
+          if(is_Del){
+            //删除对应的数据
+              var params = {};
+              params._id = id;
+              axios.post('/api/del_storage',params).then((res)=>{//根据_id删除对应库位信息
+                  if(!res.data.code){
+                    alert("删除成功");
+                    this.check_info();
+                  }
+              })
+            }else{
+              alert("仓库中仍有商品，请先出库所有商品");
+            }
+        }).catch((err)=>{//查询不到连接字符串的ID 的对应的仓库则返回
+           if(is_Del){
+            //删除对应的数据
+              var params = {};
+              params._id = id;
+              axios.post('/api/del_storage',params).then((res)=>{//根据_id删除对应库位信息
+                  if(!res.data.code){
+                    alert("删除成功");
+                    this.check_info();
+                  }
+              })
+            }else{
+              alert("仓库中仍有商品，请先出库所有商品");
+            }
+          })
+      
     },
     check_info(){
       // `this` 指向 vm 实例 确认是否登录
